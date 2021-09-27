@@ -33,54 +33,64 @@ class Apriori:
         except Exception as e:
             print(e)
 
-    def get_itemsets_data(self):
+    def get_itemsets_data(self, DEBUG_MODE=True):
         if os.path.isfile(self.itemsets_data_path):
-            print('itemsets_data exists.')
+            if DEBUG_MODE:
+                print('itemsets_data exists.')
             itemsets_data = pd.read_csv(self.itemsets_data_path)
             return itemsets_data
         else:
-            print('itemsets data doesn\'t exists.')
+            if DEBUG_MODE:
+                print('itemsets data doesn\'t exists.')
             return None
     
-    def get_association_rule_matrix(self):
+    def get_association_rule_matrix(self, DEBUG_MODE=True):
         if os.path.isfile(self.association_rule_matrix_path):
-            print('association_rule matrix exists.')
+            if DEBUG_MODE:
+                print('association_rule matrix exists.')
             association_rule_matrix = pd.read_csv(self.association_rule_matrix_path)
             return association_rule_matrix
         else:
-            print('association_rule matrix doesn\'t exists.')
+            if DEBUG_MODE:
+                print('association_rule matrix doesn\'t exists.')
             return None
 
-    def get_support_matrix(self):
+    def get_support_matrix(self, DEBUG_MODE=True):
         if os.path.isfile(self.support_matrix_path):
-            print('support matrix exists.')
+            if DEBUG_MODE:
+                print('support matrix exists.')
             support_matrix = pd.read_csv(self.support_matrix_path)
             return support_matrix
         else:
-            print('support matrix doesn\'t exists.')
+            if DEBUG_MODE:
+                print('support matrix doesn\'t exists.')
             return None
             
-    def get_confidence_matrix(self):
+    def get_confidence_matrix(self, DEBUG_MODE=True):
         if os.path.isfile(self.confidence_matrix_path):
-            print('confidence matrix exists.')
+            if DEBUG_MODE:
+                print('confidence matrix exists.')
             confidence_matrix = pd.read_csv(self.confidence_matrix_path)
             return confidence_matrix
         else:
-            print('confidence matrix doesn\'t exists.')
+            if DEBUG_MODE:
+                print('confidence matrix doesn\'t exists.')
             return None
 
-    def get_lift_matrix(self):
+    def get_lift_matrix(self, DEBUG_MODE=True):
         if os.path.isfile(self.lift_matrix_path):
-            print('lift matrix exists.')
+            if DEBUG_MODE:
+                print('lift matrix exists.')
             lift_matrix = pd.read_csv(self.lift_matrix_path)
             return lift_matrix
         else:
-            print('lift matrix doesn\'t exists.')
+            if DEBUG_MODE:
+                print('lift matrix doesn\'t exists.')
             return None
 
 
     def analysis(self, id: int, min_support=0.05,DEBUG_MODE=True):
-        itemsets_data = self.get_itemsets_data()
+        itemsets_data = self.get_itemsets_data(DEBUG_MODE=DEBUG_MODE)
         if itemsets_data is None:
             lasttime = time.time()
             itemsets_data = apriori(self.purchase_data,min_support=min_support,use_colnames=True, verbose=1)
@@ -92,9 +102,10 @@ class Apriori:
         itemsets_data['itemsets'] = itemsets_data['itemsets'].apply(lambda x: frozenset(x.replace('\'',"").strip('][').split(', ')))
 
         if DEBUG_MODE:
+            print('itemsets data:')
             print(itemsets_data)
         
-        association_rule_matrix = self.get_association_rule_matrix()
+        association_rule_matrix = self.get_association_rule_matrix(DEBUG_MODE=DEBUG_MODE)
         if association_rule_matrix is None:
             lasttime = time.time()
             association_rule_matrix = association_rules(itemsets_data, metric='support', min_threshold=0)
@@ -109,9 +120,9 @@ class Apriori:
         association_rule_matrix['antecedents'] = association_rule_matrix['antecedents'].apply(lambda x: frozenset(x.replace('\'',"").strip('][').split(', ')))
         association_rule_matrix['consequents'] = association_rule_matrix['consequents'].apply(lambda x: frozenset(x.replace('\'',"").strip('][').split(', ')))
 
-        support_matrix = self.get_support_matrix()
-        confidence_matrix = self.get_confidence_matrix()
-        lift_matrix = self.get_lift_matrix()
+        support_matrix = self.get_support_matrix(DEBUG_MODE=DEBUG_MODE)
+        confidence_matrix = self.get_confidence_matrix(DEBUG_MODE=DEBUG_MODE)
+        lift_matrix = self.get_lift_matrix(DEBUG_MODE=DEBUG_MODE)
 
         if (support_matrix is None) or (confidence_matrix is None) or (lift_matrix is None):
             support_matrix = np.zeros((65,65))
@@ -161,6 +172,7 @@ class Apriori:
         matrix_sorted_by_id = association_rule_matrix[(association_rule_matrix['antecedents'] == {str(id)}) & (association_rule_matrix['consequent_len'] < 2)]
 
         if DEBUG_MODE:
+            print('association rule matrix sorted by id: ')
             print(matrix_sorted_by_id)
 
         sorted_support = list(matrix_sorted_by_id.sort_values(by = ['support'], ascending=False)['consequents'].apply(lambda x: set(x).pop()))
