@@ -1,0 +1,10 @@
+{
+    "dir_path": "./simulate_data2/",
+    "purchase_data_path": "purchase_data.csv",
+    "itemsets_data_path": "itemsets_data.csv",
+    "association_rule_matrix_path": "association_rule_matrix.csv",
+    "support_matrix_path": "support_matrix.csv",
+    "confidence_matrix_path": "confidence_matrix.csv",
+    "lift_matrix_path": "lift_matrix.csv"
+  }
+  
