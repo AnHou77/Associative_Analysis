@@ -125,15 +125,16 @@ class Apriori:
         lift_matrix = self.get_lift_matrix(DEBUG_MODE=DEBUG_MODE)
 
         if (support_matrix is None) or (confidence_matrix is None) or (lift_matrix is None):
-            support_matrix = np.zeros((65,65))
-            confidence_matrix = np.zeros((65,65))
-            lift_matrix = np.zeros((65,65))
+            products_size = len(self.purchase_data.columns)
+            support_matrix = np.zeros((products_size,products_size))
+            confidence_matrix = np.zeros((products_size,products_size))
+            lift_matrix = np.zeros((products_size,products_size))
 
             temp_matrix = association_rule_matrix[(association_rule_matrix['antecedent_len'] < 2) & (association_rule_matrix['consequent_len'] < 2)]
 
             old_time = time.time()
-            for i in range(65):
-                for j in range(65):
+            for i in range(products_size):
+                for j in range(products_size):
                     if i == j:
                         support_matrix[i][j] = temp_matrix[temp_matrix['antecedents'] == {str(i)}].iloc[0]['antecedent support']
                         confidence_matrix[i][j] = None

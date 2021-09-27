@@ -1,5 +1,5 @@
 {
-    "dir_path": "./simulate_data2/",
+    "dir_path": "./simulate_data/",
     "purchase_data_path": "purchase_data.csv",
     "itemsets_data_path": "itemsets_data.csv",
     "association_rule_matrix_path": "association_rule_matrix.csv",

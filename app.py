@@ -9,7 +9,7 @@ def main():
         f.close()
     apriori_model = Apriori(config=config)
     id = int(input('Product ID: '))
-    sorted_support, sorted_confidence, sorted_lift = apriori_model.analysis(id,DEBUG_MODE=True)
+    sorted_support, sorted_confidence, sorted_lift = apriori_model.analysis(id,min_support=0.003,DEBUG_MODE=True)
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,14 @@
+1. 檔案、目錄路徑皆在 `config.json` 中做設定，設定好且模型正常讀取後，模型運作便沒有問題
+2. 因 apriori 演算法主要是找 frequent itemsets, 因此 source data 目前只採用 `purchase_data.csv`.
+3. 如果 `purchase_data.csv` 這個檔案與 `min_support` 沒有做過任何更改，則下述檔案只要生成一次，後續模型運作皆會自動讀取，`purchase_data.csv` 與 `min_support` 有更改時，只需將下述檔案全數刪除，讓模型再次生成即可
+{
+    "itemsets_data_path": "itemsets_data.csv",
+    "association_rule_matrix_path": "association_rule_matrix.csv",
+    "support_matrix_path": "support_matrix.csv",
+    "confidence_matrix_path": "confidence_matrix.csv",
+    "lift_matrix_path": "lift_matrix.csv"
+}
+4. analysis() 中的 min_support 是用來過濾掉 support 值低於此數值的 itemsets，因為 apriori 演算法能夠找出所有可能的 itemsets，但代價卻是龐大的計算量，
+    因此可以透過設定 min_support 這個 threshold 排除掉較不相關的 itemsets，以減少演算法計算的時間與記憶體負荷.
+5. 目前輸出的 ITEM-ITEM support, confidence, lift matrix，因 min_support 過濾過後，可能有部分 product id 與給定的 product id 之間無法算出 support, confidence, lift 的值，
+    目前這些值都會先給 nan，若發現輸出結果過多 nan，可嘗試將 min_support 值調低，找出更多的 itemsets 後，便能找出更多產品與產品之間的關聯值
